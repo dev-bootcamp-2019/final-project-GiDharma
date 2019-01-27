@@ -1,5 +1,5 @@
 var Bounty = artifacts.require("./Bounty.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Bounty);
+  // deployer.deploy(Bounty);
 };
