@@ -1,5 +1,9 @@
 var Bounty = artifacts.require("./Bounty.sol");
 
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 contract('Bounty', async (accounts) => {
 
   const owner = accounts[0]
@@ -17,19 +21,24 @@ contract('Bounty', async (accounts) => {
     const contractBalance = web3.utils.fromWei(await web3.eth.getBalance(bounty1.address), 'ether');
     assert.equal(contractBalance, 1, "contract balance is 1 ether");
   });
+  
   it("should accept offers", async () => {
     assert(await bounty1.offer("Offer #1", {from: alice}), "accepted alice's offer");
     assert(await bounty1.offer("Offer #2", {from: bob}), "accepted bob's offer");
   });
+  
   it("should be able to fulfill a bounty with a chosen offer", async () => {
     assert(await bounty1.fulfill(bob, {from: owner}), "bob's offer was chosen by owner");
   });
+  
   it("should let chosen offer's owner withdraw the money", async () => {
-    const bobBalanceBefore = web3.utils.fromWei(await web3.eth.getBalance(bob), 'ether');
+    const bobBalanceBefore = parseFloat(web3.utils.fromWei(await web3.eth.getBalance(bob), 'ether'), 10);
     assert(await bounty1.withdrawReward({from: bob}), "bob withdrew bounty reward successfully");
-    const bobBalanceAfter = web3.utils.fromWei(await web3.eth.getBalance(bob), 'ether');
-    assert(bobBalanceBefore < bobBalanceAfter, "check that bob's balance grew")
+    await timeout(1000);
+    const bobBalanceAfter = parseFloat(web3.utils.fromWei(await web3.eth.getBalance(bob), 'ether'), 10);
+    assert(bobBalanceAfter > bobBalanceBefore, "check that bob's balance grew");
   });
+  
   it("should fail to transfer bounty reward when circuit breaker is toggled on", async () => {
     const bounty = await Bounty.new("asdasd", {from: owner, value: deposit})
     await bounty.offer("Offer #2", {from: bob});
