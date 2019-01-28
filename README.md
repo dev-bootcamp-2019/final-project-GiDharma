@@ -13,3 +13,4 @@ __Note__: Due to lack of time cause of unfortunate events, this project is far f
 
 
 ##### The project is a truffle drizzle unboxed, Bounty contract is a instance contract not a singleton, thus needs to be made
+##### I haven't had the chance to complete the UI, hence it does not work
