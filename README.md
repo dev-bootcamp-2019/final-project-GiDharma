@@ -14,3 +14,8 @@ __Note__: Due to lack of time cause of unfortunate events, this project is far f
 
 ##### The project is a truffle drizzle unboxed, Bounty contract is a instance contract not a singleton, thus needs to be made
 ##### I haven't had the chance to complete the UI, hence it does not work
+
+### Getting the project up and running
+1. run `ganache-cli` in a separate terminal window
+1. run `truffle compile && truffle migrate`
+1. `cd app/ && npm run start`
